@@ -60,8 +60,21 @@ class ControllerModalidade extends Controller
 		}
 		$retorno = Modalidade::find($id);
 		$categorias = CategoriaModalidade::all();
+		$mods2 = Modalidade::where(function($query){
+			$query->whereNull('sub')->orWhere('sub','0');
+		})->where("sexo",$retorno['sexo'])->where('categoria',$retorno['categoria'])->get();	
 		$mods = Modalidade::whereNull('sub')->orWhere('sub','0')->get();	
-		return view('admin.modalidades.formulario')->with('acao','editar')->with('categorias',$categorias)->with('retorno',$retorno)->with('modalidades',$mods)->with('msg',$msg);
+		$arr = '';
+		$x = 1;
+		foreach($mods as $mod){
+			if($x == 1){
+				$arr .= '["'.$mod['modalidade'].'","'.$mod['sexo'].'","'.$mod['categoria'].'","'.$mod['id'].'"]';
+			}else{
+				$arr .= ',["'.$mod['modalidade'].'","'.$mod['sexo'].'","'.$mod['categoria'].'","'.$mod['id'].'"]';
+			}
+			$x++;
+		}
+		return view('admin.modalidades.formulario')->with('acao','editar')->with('categorias',$categorias)->with('retorno',$retorno)->with('modalidades',$mods2)->with('msg',$msg)->with('arr',$arr);
 		
 		
 	}
@@ -81,8 +94,18 @@ class ControllerModalidade extends Controller
 			$objeto->save();		
 		}
 		$categorias = CategoriaModalidade::all();	
-		$mods = Modalidade::whereNull('sub')->orWhere('sub','0')->orWhere('sub','')->get();
-		return view('admin.modalidades.formulario')->with('acao','novo')->with('modalidades',$mods)->with('categorias',$categorias)->with('msg',$msg);		
+		$mods = Modalidade::whereNull('sub')->orWhere('sub','0')->get();	
+		$arr = '';
+		$x = 1;
+		foreach($mods as $mod){
+			if($x == 1){
+				$arr .= '["'.$mod['modalidade'].'","'.$mod['sexo'].'","'.$mod['categoria'].'","'.$mod['id'].'"]';
+			}else{
+				$arr .= ',["'.$mod['modalidade'].'","'.$mod['sexo'].'","'.$mod['categoria'].'","'.$mod['id'].'"]';
+			}
+			$x++;
+		}
+		return view('admin.modalidades.formulario')->with('acao','novo')->with('categorias',$categorias)->with('msg',$msg)->with('arr',$arr);		
 	}	
 
 	

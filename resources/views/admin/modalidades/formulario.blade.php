@@ -43,7 +43,7 @@
 						</div>
 						<div class="form-group">
 						  <label for="sexo">Sexo</label>
-						  <select name="sexo" required class="form-control">
+						  <select name="sexo" required class="form-control sexo">
 						  		<option value="">-- Selecione uma opção --</option>
 						  		<option {{((!empty($retorno['sexo']) and $retorno['sexo'] == 'M') ? 'selected' : '')}} value="M">Masculino</option>
 						  		<option {{((!empty($retorno['sexo']) and $retorno['sexo'] == 'F') ? 'selected' : '')}} value="F">Feminino</option>
@@ -62,7 +62,7 @@
 
 						<div class="form-group possuisub" {{ ((empty($retorno['sub'])) ? 'style=display:none' : '') }} >
 						  <label for="instituicao">Sub Modalidade</label>
-						  <select name="instituicao" class="form-control">
+						  <select name="sub" class="form-control sub">
 						  		<option value="">-- Selecione uma opção --</option>
 						  		@foreach($modalidades as $modalidade)
 						  			<option {{ ((!empty($retorno['sub']) and $retorno['sub'] == $modalidade['id']) ? 'selected' : '') }} value="{{$modalidade['id']}}">{{$modalidade['modalidade']}}</option>
@@ -81,10 +81,21 @@
 			</form>
 		</section>
 		<script>
+		var array = [ <?=$arr;?> ];
 		$(function(){
 			$('.categoria').change(function() {
 				var sub = $(".categoria :selected").attr('data-sub');
+				html = '<option value="">--Não Possui sub modalidade--</option>';
 				if(sub == 'S'){
+					for(arr in array){
+						console.log(array[arr][1]+" == "+$('.sexo').val());
+						if(array[arr][1] == $('.sexo').val() && array[arr][2] == $('.categoria').val()){
+							html += "<option value='"+array[arr][3]+"'>"+array[arr][0]+"</option>";
+							console.log(array[arr]);
+						}
+						
+					}
+					$('.sub').html(html);
 					$('.possuisub').css("display",'');
 				}else{
 					$('.possuisub').css("display",'none');

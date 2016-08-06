@@ -42,6 +42,23 @@
 						  <label for="instituicao">Instituição</label>
 						  <input class="form-control" id="instituicao" name="instituicao" value="{{(!empty($retorno['instituicao']) ? $retorno['instituicao'] : '')}}" placeholder="Instituição" type="text" >
 						</div>	
+						<h3> Professor de educação física responsável</h3>
+						<div class="form-group">
+						  <label for="campus">Nome</label>
+						  <input class="form-control" id="tecnico" name="tecnico" value="{{(!empty($retorno['tecnico']) ? $retorno['tecnico'] : '')}}" placeholder="Nome" type="text" >
+						</div>
+						<div class="form-group">
+						  <label for="campus">SIAPE</label>
+						  <input class="form-control" id="siape" name="siape" value="{{(!empty($retorno['siape']) ? $retorno['siape'] : '')}}" placeholder="SIAPE" type="text" >
+						</div>
+						<div class="form-group">
+						  <label for="telefone">Telefone</label>
+						  <input class="form-control" id="telefone" name="telefone" value="{{(!empty($retorno['telefone']) ? $retorno['telefone'] : '')}}" placeholder="Telefone" type="text" >
+						</div>
+						<div class="form-group">
+						  <label for="campus">Email</label>
+						  <input class="form-control" id="email" name="email" value="{{(!empty($retorno['email']) ? $retorno['email'] : '')}}" placeholder="Email" type="text" >
+						</div>
 					  </div><!-- /.box-body -->
 					   <div class="box-footer">
 						<button type="submit" class="btn btn-primary">Enviar</button>

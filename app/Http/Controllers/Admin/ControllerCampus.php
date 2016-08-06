@@ -8,6 +8,7 @@ use sportcontrol\Campus;
 use sportcontrol\Http\Controllers\Controller;
 use Request;
 use Datatables;
+use App;
 
 class ControllerCampus extends Controller
 {
@@ -41,11 +42,16 @@ class ControllerCampus extends Controller
 			$objeto = Campus::find($id);
 			$objeto->campus = $campos['campus'];
 			$objeto->instituicao = $campos['instituicao'];
+			$objeto->tecnico = $campos['tecnico'];
+			$objeto->siape = $campos['siape'];
+			$objeto->email = $campos['email'];
+			$objeto->telefone = $campos['telefone'];
 			$objeto->save();
 			$msg[0] = 'sucesso';
 			$msg[1] = 'Campus adicionada com sucesso';
 			
 		}
+		$instituicoes = Instituicao::all();
 		$retorno = Campus::find($id);
 			return view('admin.campus.formulario')->with('acao','editar')->with('instituicoes',$instituicoes)->with('retorno',$retorno)->with('msg',$msg);
 		
@@ -60,6 +66,10 @@ class ControllerCampus extends Controller
 			$objeto =  new Campus;
 			$objeto->campus = $campos['campus'];
 			$objeto->instituicao = $campos['instituicao'];
+			$objeto->tecnico = $campos['tecnico'];
+			$objeto->siape = $campos['siape'];
+			$objeto->email = $campos['email'];
+			$objeto->telefone = $campos['telefone'];
 			$objeto->save();
 			$msg[0] = 'sucesso';
 			$msg[1] = 'Campus adicionada com sucesso';

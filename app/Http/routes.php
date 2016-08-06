@@ -11,6 +11,35 @@
 |
 */
 
+//Painel do Professor
+Route::get('/', ['as' => 'dashboard','middleware' => 'auth.user',function () {
+    return view('professor.home');
+}]);
+Route::get('/login',function(){
+	return view('professor.login');
+});
+Route::post('/login','Professor\ControllerLogin@login');
+Route::group(['as' => 'professor::'], function () {
+	Route::get('/modalidades',['as' => 'modalidade','uses' => 'Professor\ControllerModalidades@listar']);
+	Route::get('/modalidades/chamar/{id?}',['as' => 'modalidade::listar','uses' => 'Professor\ControllerModalidades@modalidades']);
+	#Atletas
+	Route::group(['as' => 'atletas::','prefix' => 'atletas'], function () {
+		Route::get('/',['as' => 'listar','uses' => 'Professor\ControllerAtletas@listar']);
+		Route::match(array('GET', 'POST'),'/novo', ['as' => 'novo','uses' => 'Professor\ControllerAtletas@novo']);
+		Route::match(array('GET', 'POST'),'/editar/{id}', ['as' => 'editar','uses' => 'Professor\ControllerAtletas@editar']);
+		Route::get('/excluir/{id}', ['as' => 'excluir','uses' => 'Professor\ControllerAtletas@excluir']);
+	});
+
+	#Equipes
+	Route::group(['as' => 'equipes::','prefix' => 'equipes'], function () {
+		Route::match(array('GET', 'POST'),'/',['as' => 'formulario','uses' => 'Professor\ControllerAtletasModalidade@formulario']);
+		Route::post('/modalidades', ['as' => 'modalidades','uses' => 'Professor\ControllerAtletasModalidade@modalidades']);
+		Route::post('/chamarAtletas', ['as' => 'chamarAtletas','uses' => 'Professor\ControllerAtletasModalidade@chamarAtletas']);
+	});
+});
+
+
+//Painel Administrador
 Route::get('/painel', ['as' => 'dashboard','middleware' => 'auth.admin',function () {
     return view('admin.home');
 }]);
@@ -87,8 +116,15 @@ Route::group(['as' => 'admin::','prefix' => 'painel'], function () {
 
 	#Equipes
 	Route::group(['as' => 'equipes::','prefix' => 'equipes'], function () {
-		Route::get('/',['as' => 'formulario','uses' => 'Admin\ControllerAtletasModalidade@formulario']);
+		Route::match(array('GET', 'POST'),'/',['as' => 'formulario','uses' => 'Admin\ControllerAtletasModalidade@formulario']);
 		Route::post('/modalidades', ['as' => 'modalidades','uses' => 'Admin\ControllerAtletasModalidade@modalidades']);
 		Route::post('/chamarAtletas', ['as' => 'chamarAtletas','uses' => 'Admin\ControllerAtletasModalidade@chamarAtletas']);
+	});
+
+	#Fichas de inscriçao
+	Route::group(['as' => 'fichas::','prefix' => 'fichas'], function () {
+		Route::match(array('GET', 'POST'),'/',['as' => 'index','uses' => 'Admin\ControllerFichas@index']);
+		Route::post('/gerar', ['as' => 'gerar','uses' => 'Admin\ControllerFichas@gerar']);
+
 	});
 });

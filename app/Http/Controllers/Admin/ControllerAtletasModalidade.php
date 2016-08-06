@@ -12,8 +12,10 @@ use sportcontrol\Modalidade;
 use sportcontrol\AtletasModalidade;
 use sportcontrol\ModalidadeCampus;
 use sportcontrol\Funcoes;
+use sportcontrol\ModalidadeEvento;
 use sportcontrol\Http\Controllers\Controller;
 use Request;
+use App;
 use Datatables;
 use Carbon\Carbon;
 
@@ -27,7 +29,38 @@ class ControllerAtletasModalidade extends Controller
 		$retorno = [];
 		$msg = [];
 		$campos = Request::all();
-		if($acao == 'novo' and Request::input('_token')){				
+		if($acao == 'novo' and Request::input('_token')){	
+			$atletas = $campos['atletasMulti'];
+			$arr = [];
+			foreach($atletas as $atleta){
+				$tem = AtletasModalidade::where('atleta',$atleta)->where("modalidade",$campos['modalidade'])->where("evento",$campos['evento'])->count();
+				if($tem == 0){
+					$at = new AtletasModalidade;
+					$at->atleta = $atleta;
+					$at->modalidade = $campos['modalidade'];
+					$at->evento = $campos['evento'];
+					$at->campus = $campos['campus'];
+					$at->save();
+					$arr[] = $at['id'];
+				}else{
+					$tem = AtletasModalidade::where('atleta',$atleta)->where("modalidade",$campos['modalidade'])->where("evento",$campos['evento'])->get();
+					$arr[] = $tem['id'];
+				}
+			}
+			$atletas = AtletasModalidade::where("modalidade",$campos['modalidade'])->where("evento",$campos['evento'])->get();
+			foreach($atletas as $atleta){
+				if(!in_array($atleta['id'], $arr)){
+					AtletasModalidade::find($atleta['id'])->delete();
+				}
+			}
+			$objeto = ModalidadeCampus::where("modalidade",$campos['modalidade'])->where("evento",$campos['evento'])->first();
+			$objeto->tecnico = $campos['tecnico'];
+			$objeto->siape = $campos['siape'];
+			$objeto->email = $campos['email'];
+			$objeto->telefone = $campos['telefone'];
+			$objeto->save();
+			$msg[0] = 'sucesso';
+			$msg[1] = 'Equipe registrada com sucesso';
 		}
 		$instituicoes = Instituicao::all();
 		$eventos = Eventos::all();
@@ -52,7 +85,8 @@ class ControllerAtletasModalidade extends Controller
 	function chamarAtletas(){
 		$campos = Request::all();
 		$retorno = Modalidade::find($campos['modalidade']);
-		if($retorno['sub']== $retorno['ID'] or $retorno['sub'] == ''){
+		$ret = ModalidadeEvento::where('modalidade',$campos['modalidade'])->where('evento',$campos['evento'])->first();
+		if($retorno['sub']== $retorno['id'] or $retorno['sub'] == ''){
 			$retorno2 = Atletas::where("sexo",$retorno['sexo'])->where("campus",$campos['campus'])->get();
 			foreach($retorno2 as $result){
 					$ar[$result['id']] = $result['nome'];				
@@ -70,6 +104,7 @@ class ControllerAtletasModalidade extends Controller
 		?>
 		<script src="<?=App::make('url')->to('/');?>/resources/assets/js/jquery.ui.widget.js"></script>
 		<script src="<?=App::make('url')->to('/');?>/resources/assets/js/jquery-picklist.js"></script>
+
 		<script>
 		$(function()
 {
@@ -82,9 +117,10 @@ class ControllerAtletasModalidade extends Controller
         removeAllLabel:     "Remover Todos",
         removeLabel:        "Remover",
         sortAttribute:      "value",
-		selectLimit : <?=$retorno['maximo']?>,
+		selectLimit : <?=$ret['maximo']?>,
 
 		<?php
+		$arr = [];
 		if(count($retorno3) > 0){
 			print "items:
         [";
@@ -119,15 +155,34 @@ class ControllerAtletasModalidade extends Controller
     
 		<?php
 	foreach($retorno2 as $result){
-				if(!in_array($result['ID'],$arr))
+				if(!in_array($result['id'],$arr))
 					print "<option value='".$result['id']."'>".$result['nome']."</option>";
 	}
+	$ret = ModalidadeCampus::where('campus',$campos['campus'])->where('modalidade',$campos['modalidade'])->first();
 
 ?>
 </select>
 </div>
 </div>
+<h3> Informações do Técnico</h3>
+<div class="form-group">
+  <label for="campus">Nome</label>
+  <input class="form-control" id="tecnico" name="tecnico" value="<?=$ret['tecnico'];?>" placeholder="Nome" type="text" >
+</div>
+<div class="form-group">
+  <label for="campus">SIAPE</label>
+  <input class="form-control" id="siape" name="siape" value="<?=$ret['siape'];?>"" placeholder="SIAPE" type="text" >
+</div>
+<div class="form-group">
+	<label for="telefone">Telefone</label>
+	<input class="form-control" id="telefone" name="telefone" value="<?=$ret['telefone'];?>" placeholder="Telefone" type="text" >
+</div>
+<div class="form-group">
+	<label for="campus">Email</label>
+	<input class="form-control" id="email" name="email" value="<?=$ret['email'];?>" placeholder="Email" type="text" >
+</div>
 		<?php
+
 	}
 	
 }

@@ -45,6 +45,7 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth.admin' => \sportcontrol\Http\Middleware\AuthAdmin::class,
+        'auth.user' => \sportcontrol\Http\Middleware\AuthProfessor::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'can' => \Illuminate\Foundation\Http\Middleware\Authorize::class,
         'guest' => \sportcontrol\Http\Middleware\RedirectIfAuthenticated::class,

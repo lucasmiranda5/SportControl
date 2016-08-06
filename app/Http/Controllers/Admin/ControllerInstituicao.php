@@ -35,6 +35,10 @@ class ControllerInstituicao extends Controller
 		if($acao == 'editar' and Request::input('_token')){
 			$objeto = Instituicao::find($id);
 			$objeto->instituicao = $campos['instituicao'];
+			$objeto->tecnico = $campos['tecnico'];
+			$objeto->siape = $campos['siape'];
+			$objeto->email = $campos['email'];
+			$objeto->telefone = $campos['telefone'];
 			$objeto->save();
 			$msg[0] = 'sucesso';
 			$msg[1] = 'Instituição adicionada com sucesso';
@@ -53,6 +57,10 @@ class ControllerInstituicao extends Controller
 		if($acao == 'novo' and Request::input('_token')){
 			$objeto =  new Instituicao;
 			$objeto->instituicao = $campos['instituicao'];
+			$objeto->tecnico = $campos['tecnico'];
+			$objeto->siape = $campos['siape'];
+			$objeto->email = $campos['email'];
+			$objeto->telefone = $campos['telefone'];
 			$objeto->save();
 			$msg[0] = 'sucesso';
 			$msg[1] = 'Instituição adicionada com sucesso';

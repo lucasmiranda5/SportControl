@@ -58,7 +58,16 @@
 						  		<option {{((!empty($retorno['por']) and $retorno['por'] == 'I') ? 'selected' : '')}} value="I">Instituição</option>
 						  		<option {{((!empty($retorno['por']) and $retorno['por'] == 'C') ? 'selected' : '')}} value="C">Campus</option>						  		
 						  </select>
-						</div>								
+						</div>	
+						<div class="form-group">
+						  <label for="site">Imagem do cabeçalho das fichas (700px x 156px)</label>
+						  <input id="site" name="imagem1"  type="file" >
+						</div>
+						@if($acao == 'editar')
+		               	@if($retorno['imagem1'] != '')
+		               	  <img src="<?=App::make('url')->to('/');?>/images/{{ $retorno['imagem1'] }}" width="300px">
+		               	@endif
+		               @endif
 					  </div><!-- /.box-body -->
 					   <div class="box-footer">
 						<button type="submit" class="btn btn-primary">Enviar</button>

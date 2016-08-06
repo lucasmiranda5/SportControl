@@ -64,11 +64,11 @@
 						</div>
 						<div class="form-group">
 							<label>Email</label>
-							<input type="text" required  name="email" class="form-control" value="{{(!empty($retorno['nome']) ? $retorno['nome'] : '') }}">
+							<input type="text" required  name="email" class="form-control" value="{{(!empty($retorno['email']) ? $retorno['email'] : '') }}">
 						</div>
 						<div class="form-group">
 							<label>Usuario</label>
-							<input type="text" required name="usuario" class="form-control" value="{{(!empty($retorno['nome']) ? $retorno['nome'] : '') }}">
+							<input type="text" required name="usuario" class="form-control" value="{{(!empty($retorno['usuario']) ? $retorno['usuario'] : '') }}">
 						</div>
 						<div class="form-group">
 							<label>Senha</label>

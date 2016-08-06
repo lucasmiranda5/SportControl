@@ -13,6 +13,8 @@ use sportcontrol\ModalidadeCampus;
 use sportcontrol\Http\Controllers\Controller;
 use Request;
 use Datatables;
+use Carbon\Carbon;
+
 
 class ControllerEventos extends Controller
 {
@@ -74,6 +76,15 @@ class ControllerEventos extends Controller
 			$objeto->site = $campos['site'];
 			$objeto->data_inicio = Funcoes::data($campos['data_inicio'],'db');
 			$objeto->data_fim = Funcoes::data($campos['data_fim'],'db');
+			if(isset($campos['imagem1'])) {
+					$file = $campos['imagem1'];
+					$timestamp = str_replace([' ', ':'], '-', Carbon::now()->toDateTimeString());            
+					$name = $timestamp. '-' .$file->getClientOriginalName();
+					if($objeto['imagem1'] != '')
+						@unlink(base_path().'/images/'.$objeto['imagem1']);
+					$objeto['imagem1'] = $name;
+					$file->move(base_path().'/images/', $name);
+				}
 			$objeto->save();
 			$msg[0] = 'sucesso';
 			$msg[1] = 'Campus adicionada com sucesso';
@@ -96,6 +107,13 @@ class ControllerEventos extends Controller
 			$objeto->site = $campos['site'];
 			$objeto->data_inicio = Funcoes::data($campos['data_inicio'],'db');
 			$objeto->data_fim = Funcoes::data($campos['data_fim'],'db');
+			if(isset($campos['imagem1'])) {
+					$file = $campos['imagem1'];
+					$timestamp = str_replace([' ', ':'], '-', Carbon::now()->toDateTimeString());            
+					$name = $timestamp. '-' .$file->getClientOriginalName();					
+					$objeto['imagem1'] = $name;
+					$file->move(base_path().'/images/', $name);
+				}
 			$objeto->save();
 			$msg[0] = 'sucesso';
 			$msg[1] = 'Campus adicionada com sucesso';
@@ -188,6 +206,12 @@ class ControllerEventos extends Controller
 
 	public function gerarModalidades($evento,$campus){
 		$eventos = Eventos::find($evento);
+		print '
+				<div class="checkbox">
+                  <label>
+                    <input value="S" type="checkbox" class="selecionartodos">Selecionar Todos
+                  </label>
+                </div>';
 		if($eventos['por'] == 'C'){			
 			$mods = ModalidadeEvento::where('evento',$evento)->get();
 			foreach($mods as $mod){
@@ -197,7 +221,7 @@ class ControllerEventos extends Controller
 				print '
 				<div class="checkbox">
                   <label>
-                    <input '.$che.' name="modalidade['.$mod['id'].']" value="S" type="checkbox">'.$modalidade['modalidade'].'
+                    <input class="checks" '.$che.' name="modalidade['.$mod['id'].']" value="S" type="checkbox">'.$modalidade['modalidade'].'
                   </label>
                 </div>';
 			}
@@ -218,12 +242,24 @@ class ControllerEventos extends Controller
 					print '
 					<div class="checkbox">
 	                  <label>
-	                    <input '.$che.' name="modalidade['.$mod['id'].']" value="S" type="checkbox">'.$modalidade['modalidade'].'
+	                    <input class="checks" '.$che.' name="modalidade['.$mod['id'].']" value="S" type="checkbox">'.$modalidade['modalidade'].'
 	                  </label>
 	                </div>';
             	}
 			}
 		}
+		?>
+		<script>
+		$(function(){
+			$('.selecionartodos').click(function(){
+				if($(this).prop('checked')){
+					$('.checks').prop('checked',true);
+				}else{
+					$('.checks').prop('checked',false);
+				}
+			})
+		});
+		<?php
 	}
 	
 	
