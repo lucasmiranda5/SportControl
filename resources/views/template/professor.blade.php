@@ -26,6 +26,11 @@
                 <i class="fa fa-dashboard"></i> <span>Equipes</span>
               </a>
               </li>
+                <li>
+               <a href="{{route('professor::fichas::index')}}">
+                <i class="fa fa-dashboard"></i> <span>Fichas de inscrição</span>
+              </a>
+            </li>
              
              <li >
               <a href="">

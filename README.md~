@@ -17,7 +17,6 @@ A administrador é dividido em:
 7 - Atletas
 8 - Equipes
 9 - Fichas de Inscrições
-10 - Administradores (Em construção)
 
 **1-Instituição**
 
@@ -55,9 +54,6 @@ Víncula os atletas as modalidades
 
 Onde é gerado os arquivos das fichas para cada campus e evento
 
-**10 - Administradores**
-
-Cadastro dos administradores do sistema
 
 ### Professor
 
@@ -67,7 +63,7 @@ A administrador é dividido em:
 2 - Atletas
 3 - Equipes
 4 - Fichas de Inscrições
-5 - Perfil (Em construção)
+5 - Perfil
 
 **1-Modalidades**
 

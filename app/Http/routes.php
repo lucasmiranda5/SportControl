@@ -36,6 +36,12 @@ Route::group(['as' => 'professor::'], function () {
 		Route::post('/modalidades', ['as' => 'modalidades','uses' => 'Professor\ControllerAtletasModalidade@modalidades']);
 		Route::post('/chamarAtletas', ['as' => 'chamarAtletas','uses' => 'Professor\ControllerAtletasModalidade@chamarAtletas']);
 	});
+	#Fichas de inscriçao
+	Route::group(['as' => 'fichas::','prefix' => 'fichas'], function () {
+		Route::match(array('GET', 'POST'),'/',['as' => 'index','uses' => 'Professor\ControllerFichas@index']);
+		Route::post('/gerar', ['as' => 'gerar','uses' => 'Professor\ControllerFichas@gerar']);
+
+	});
 });
 
 

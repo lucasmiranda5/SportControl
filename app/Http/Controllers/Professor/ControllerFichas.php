@@ -1,6 +1,6 @@
 <?php
 
-namespace sportcontrol\Http\Controllers\Admin;
+namespace sportcontrol\Http\Controllers\Professor;
 
 use sportcontrol\Http\Requests;
 use sportcontrol\Instituicao;
@@ -16,16 +16,20 @@ use sportcontrol\Http\Controllers\Controller;
 use Request;
 use Datatables;
 use App;
+use Auth;
 
 class ControllerFichas extends Controller
 {
 	public function __construct(){
-		  $this->middleware('auth.admin');
+		  $this->middleware('auth.user');
 	}
     public function index(){
-    	$instituicoes = Instituicao::all();
-		$eventos = Eventos::all();
-		return view('admin.ficha.formulario')->with('instituicoes',$instituicoes)->with("eventos",$eventos);    
+    	$eve = ModalidadeCampus::where('campus',Auth::user()->campus)->get();
+    	$arr = [];
+    	foreach($eve as $ev)
+    		$arr[] = $ev['evento'];
+		$eventos = Eventos::whereIn("id",$arr)->get();
+		return view('professor.ficha.formulario')->with("eventos",$eventos);    
 
 			
 	}
@@ -33,7 +37,7 @@ class ControllerFichas extends Controller
 		$campos = Request::all();
 		$evento = Eventos::find($campos['evento']);
 		if($evento['por'] == 'C'){
-			$cam = Campus::find($campos['campus']);
+			$cam = Campus::find(Auth::user()->campus);
 			$nome = $cam['campus'];
 		}else{
 			$cam = Instituicao::find($campos['instituicao']);
@@ -67,7 +71,7 @@ class ControllerFichas extends Controller
 	public function gerar(){
 		$campos = Request::all();
 		$evento = Eventos::find($campos['evento']);
-		$campus = Campus::find($campos['campus']);
+		$campus = Campus::find(Auth::user()->campus);
 
 		$phpWord = new \PhpOffice\PhpWord\PhpWord();
 		$sectionStyle = array(
@@ -111,12 +115,12 @@ class ControllerFichas extends Controller
 			$table->addCell(1000)->addText($x);
 			$table->addCell(2600)->addText($valor['modalidade']);
 			
-			$retorno2 = AtletasModalidade::where('evento',$campos['evento'])->where('campus',$campos['campus'])->where('modalidade',$valor['id'])->get();
+			$retorno2 = AtletasModalidade::where('evento',$campos['evento'])->where('campus',Auth::user()->campus)->where('modalidade',$valor['id'])->get();
 			$table->addCell(2100)->addText(count($retorno2));
 			$quant = count($retorno2);
 			$retorno3 = Modalidade::where("modalidade",$valor['modalidade'])->where("sexo",'F')->whereIn("id",$mods)->first();
 			if(count($retorno3) > 0){
-				$retorno2 = AtletasModalidade::where('evento',$campos['evento'])->where('campus',$campos['campus'])->where('modalidade',$retorno3['id'])->get();
+				$retorno2 = AtletasModalidade::where('evento',$campos['evento'])->where('campus',Auth::user()->campus)->where('modalidade',$retorno3['id'])->get();
 				$feminino = count($retorno2);
 				$arr[] = $retorno3[0]['id'];
 
@@ -133,7 +137,7 @@ class ControllerFichas extends Controller
 				$table->addRow();
 				$table->addCell(1000)->addText($x);
 				$table->addCell(2600)->addText($valor['modalidade']);
-				$retorno2 = AtletasModalidade::where('evento',$campos['evento'])->where('campus',$campos['campus'])->where('modalidade',$valor['id'])->get();
+				$retorno2 = AtletasModalidade::where('evento',$campos['evento'])->where('campus',Auth::user()->campus)->where('modalidade',$valor['id'])->get();
 				$table->addCell(2100)->addText("0");
 				$table->addCell(2100)->addText(count($retorno2));		
 				$table->addCell(2100)->addText(count($retorno2));
@@ -241,7 +245,7 @@ Art. 8° - Poderão participar dos JIFENMG 2016 os alunos regularmente matricula
 		}
 		$table->addCell(975, $cellRowContinue);
 
-		$atletas = Atletas::where('campus',$campos['campus'])->get();
+		$atletas = Atletas::where('campus',Auth::user()->campus)->get();
 		$x = 1;
 		
 		foreach($atletas as $valor){
@@ -297,9 +301,9 @@ Art. 8° - Poderão participar dos JIFENMG 2016 os alunos regularmente matricula
 				));
 		//INicio fica inscrição por modalidade
 
-		$retorno = ModalidadeCampus::where("campus",$campos['campus'])->where("evento",$campos['evento'])->get();
+		$retorno = ModalidadeCampus::where("campus",Auth::user()->campus)->where("evento",$campos['evento'])->get();
 		foreach($retorno as $valor){
-			$retorno2 = AtletasModalidade::where("campus",$campos['campus'])->where("evento",$campos['evento'])->where("modalidade",$valor['modalidade'])->get();
+			$retorno2 = AtletasModalidade::where("campus",Auth::user()->campus)->where("evento",$campos['evento'])->where("modalidade",$valor['modalidade'])->get();
 			if(count($retorno2)){
 				$modalidade = Modalidade::find($valor['modalidade']);
 				$section = $phpWord->addSection(array(
@@ -311,7 +315,7 @@ Art. 8° - Poderão participar dos JIFENMG 2016 os alunos regularmente matricula
 				    'borderColor' => '000',
 				    'borderSize'  => 6,
 				);
-				$campus = Campus::find($campos['campus']);
+				$campus = Campus::find(Auth::user()->campus);
 				$table = $section->addTable($tableStyle);
 				$table->addRow();
 				$table->addCell(9900, array("bgColor"=>000))->addText("FICHA DE INSCRIÇÃO",array("bold"=>true,"color"=>'FFFFFF', "size" => 10, "alignment" => "center"));
