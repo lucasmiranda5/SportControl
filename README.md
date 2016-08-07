@@ -3,6 +3,9 @@ Sistema para controle de inscrição de evento eportivo do IFNMG
 
 Sistema open source desenvolvido por Lucas Miranda para o IFNMG para ser usando no controle de inscrições do JIFENMG em qualquer etapa.
 
+## Demos
+Painel Admin: http://lucasmiranda.com.br/sportcontrol/painel Usuario: admin | senha: admin
+Professor: http://lucasmiranda.com.br/sportcontrol/   Usuario: professor | Senha: professor
 ## Módulos
 
 ### Administrador

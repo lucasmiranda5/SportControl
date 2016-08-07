@@ -40,8 +40,10 @@ Route::group(['as' => 'professor::'], function () {
 	Route::group(['as' => 'fichas::','prefix' => 'fichas'], function () {
 		Route::match(array('GET', 'POST'),'/',['as' => 'index','uses' => 'Professor\ControllerFichas@index']);
 		Route::post('/gerar', ['as' => 'gerar','uses' => 'Professor\ControllerFichas@gerar']);
-
 	});
+	Route::match(array('GET', 'POST'),'/perfil',['as' => 'perfil::index','uses' => 'Professor\ControllerPerfil@editar']);
+	Route::get('/sair', ['as' => 'sair','uses' => 'Professor\ControllerLogin@sair']);
+
 });
 
 

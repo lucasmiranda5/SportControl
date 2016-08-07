@@ -31,9 +31,14 @@
                 <i class="fa fa-dashboard"></i> <span>Fichas de inscrição</span>
               </a>
             </li>
+             <li>
+               <a href="{{route('professor::perfil::index')}}">
+                <i class="fa fa-dashboard"></i> <span>Fichas de inscrição</span>
+              </a>
+            </li>
              
              <li >
-              <a href="">
+              <a href="{{route('professor::sair')}}">
                 <i class="glyphicon glyphicon-log-out "></i> <span>Sair</span>
               </a>
             </li>
