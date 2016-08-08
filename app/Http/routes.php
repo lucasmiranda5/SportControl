@@ -63,6 +63,8 @@ Route::group(['as' => 'admin::','prefix' => 'painel'], function () {
 		Route::match(array('GET', 'POST'),'/editar/{id}', ['as' => 'editar','uses' => 'Admin\ControllerInstituicao@editar']);
 		Route::get('/excluir/{id}', ['as' => 'excluir','uses' => 'Admin\ControllerInstituicao@excluir']);
 	});
+	Route::get('/crachas', ['as' => 'crachas','uses' => 'Admin\ControllerCrachas@gerar']);
+	
 
 	#Campus
 	Route::group(['as' => 'campus::','prefix' => 'campus'], function () {
