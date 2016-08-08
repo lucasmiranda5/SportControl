@@ -56,6 +56,11 @@
                 <i class="fa fa-dashboard"></i> <span>Fichas de inscrição</span>
               </a>
             </li>
+            <li>
+               <a href="{{route('admin::crachas')}}">
+                <i class="fa fa-dashboard"></i> <span>Crachas</span>
+              </a>
+            </li>
              <li >
               <a href="">
                 <i class="glyphicon glyphicon-log-out "></i> <span>Sair</span>
