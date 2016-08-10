@@ -33,7 +33,7 @@
             </li>
              <li>
                <a href="{{route('professor::perfil::index')}}">
-                <i class="fa fa-dashboard"></i> <span>Fichas de inscrição</span>
+                <i class="fa fa-dashboard"></i> <span>Perfil</span>
               </a>
             </li>
              

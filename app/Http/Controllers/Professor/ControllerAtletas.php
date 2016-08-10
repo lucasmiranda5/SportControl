@@ -8,6 +8,10 @@ use sportcontrol\Campus;
 use sportcontrol\Usuarios;
 use sportcontrol\Atletas;
 use sportcontrol\Funcoes;
+use sportcontrol\AtletasModalidade;
+use sportcontrol\Eventos;
+use sportcontrol\Modalidade;
+use sportcontrol\ModalidadeCampus;
 use sportcontrol\Http\Controllers\Controller;
 use Request;
 use Datatables;
@@ -22,11 +26,34 @@ class ControllerAtletas extends Controller
     public function listar(){
     	if(!empty(Request::input('columns'))){
 			return Datatables::of(Atletas::query()->where("campus",Auth::user()->campus)->orderBy('id', 'desc'))
-			
+			->editColumn('modalidades',function($model){
+				$eve = ModalidadeCampus::where('campus',Auth::user()->campus)->get();
+		    	$arr = [];
+		    	$html = "";
+		    	foreach($eve as $ev)
+		    		$arr[] = $ev['evento'];
+		    	$eventos = Eventos::whereIn("id",$arr)->get();
+		    	foreach($eventos as $evento){
+		    		$atletas = AtletasModalidade::where('atleta',$model->id)->where('evento',$evento['id'])->get();
+		    		$x = 1;
+		    		$mods = "";
+		    		foreach($atletas as $atleta){
+		    			$modalidade = Modalidade::find($atleta['modalidade']);
+		    			if($x == 1)
+		    				$mods .= $modalidade['modalidade'];
+		    			else
+		    				$mods .= ",".$modalidade['modalidade'];
+		    			$x++;
+		    		}
+		    		$html .= '<a href="#" data-toggle="tooltip" title="'.$mods.'">'.$evento['nome'].'</a>';
+		    	}
+		    	return $html;
+			})
 	   		->editColumn('acoes',function($model){
 	   			return'
 	   			 <div class="tools">						   
 					<a href="'.route('professor::atletas::editar', $model->id).'"> <i class="fa fa-edit"></i></a>
+					<a href="'.route('professor::atletas::excluir', $model->id).'"> <i class="fa fa-trash"></i></a>
 				</div>';
 	   		})->make(true);
 	   	}else
@@ -124,7 +151,7 @@ class ControllerAtletas extends Controller
 				}
 				$objeto->save();
 				$msg[0] = 'sucesso';
-				$msg[1] = 'Usuario cadastrado com sucesso';
+				$msg[1] = 'Atleta cadastrado com sucesso';
 			}			
 		}
 		$instituicoes = Instituicao::all();
@@ -132,6 +159,22 @@ class ControllerAtletas extends Controller
 	}	
 	function campus($id){
 		return Campus::where('instituicao',$id)->get();
+	}
+
+	function excluir($id){
+		$atleta = Atletas::find($id);
+		if($atleta['campus'] == Auth::user()->campus){
+			AtletasModalidade::where('atleta',$id)->delete();
+			$atleta->delete();
+			$msg[0] = 'sucesso';
+			$msg[1] = 'Atleta Excluido com sucesso';
+		}else{
+			$msg[0] = 'erro';
+			$msg[1] = 'Ta tentando burlar o sistema né. Aqui o sistema é bruto #Pirapora';
+		}
+
+		return view('professor.atletas.lista')->with('msg',$msg);
+		
 	}
 	
 }

@@ -43,7 +43,7 @@ class ControllerAtletasModalidade extends Controller
 					$at->save();
 					$arr[] = $at['id'];
 				}else{
-					$tem = AtletasModalidade::where('atleta',$atleta)->where("modalidade",$campos['modalidade'])->where("evento",$campos['evento'])->get();
+					$tem = AtletasModalidade::where('atleta',$atleta)->where("modalidade",$campos['modalidade'])->where("evento",$campos['evento'])->first();
 					$arr[] = $tem['id'];
 				}
 			}

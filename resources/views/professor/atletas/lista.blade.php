@@ -38,12 +38,14 @@
                     <thead>
                       <tr>
                         <th>Nome</th>                        
+                        <th>Modalidade</th>                        
                         <th>Ações</th>                      
                       </tr>				
                     </thead>
                     <tfoot>
                       <tr>
                         <th>Nome</th>                        
+                        <th>Modalidades</th>                        
                         <th>Ações</th>                      
                       </tr>       
                     </tfoot>	
@@ -70,9 +72,12 @@
                 },
                 "columns": [
                     { "data": "nome","name":"nome"},
+                    { "data": "modalidades","name":"nome"},
                     { "data": "acoes","name":"id" },                         
                 ]
             } );
+
+            $('[data-toggle="tooltip"]').tooltip(); 
          
         } );    
     </script>  	  
