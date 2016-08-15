@@ -67,16 +67,18 @@ class ControllerAtletas extends Controller
 		if($retorno['campus'] == Auth::user()->campus){
 		$acao = Request::input('acao');
 		$msg = [];
-		$campos = Request::all();
+		$campos = Request::all();query
 		if($acao == 'editar' and Request::input('_token')){
-			$ob = Atletas::where(function($query){
-				$campos = Request::all();
-				$query->where("rg",$campos['rg'])->orwhere("cpf",$campos['cpf'])->orwhere(function($query){
-					$campos = Request::all();
-					$query->where('matricula',$campos['matricula'])->where('campus',Auth::user()->campus);
-				});
-			})->where("id","<>",$id)->count();
-			if($ob > 0){
+			$ob = 0;
+			$ob2 = 0;
+			$ob3 = 0;
+			if($campos['rg'] != '')
+				$ob = Atletas::where("rg",$campos['rg'])->where('campus',Auth::user()->campus)->where("id","<>",$id)->count();
+			if($campos['matricula'] != '')
+				$ob2 = Atletas::where("matricula",$campos['matricula'])->where('campus',Auth::user()->campus)->where("id","<>",$id)->count();
+			if($campos['cpf'] != '')
+				$ob3 = Atletas::where("cpf",$campos['cpf'])->where('campus',Auth::user()->campus)->where("id","<>",$id)->count();			
+			if($ob > 0 or $ob2 > 0 or $ob3 > 0){
 				$msg[0] = 'erro';
 				$msg[1] = 'Já existe um outro usuario com o mesmo usuario e/ou email';
 			}else{
@@ -119,14 +121,16 @@ class ControllerAtletas extends Controller
 		$msg = [];
 		$campos = Request::all();
 		if($acao == 'novo' and Request::input('_token')){
-			$ob = Atletas::where(function($query){
-				$campos = Request::all();
-				$query->where("rg",$campos['rg'])->orwhere("cpf",$campos['cpf'])->orwhere(function($query){
-					$campos = Request::all();
-					$query->where('matricula',$campos['matricula'])->where('campus',Auth::user()->campus);
-				});
-			})->count();
-			if($ob > 0){
+			$ob = 0;
+			$ob2 = 0;
+			$ob3 = 0;
+			if($campos['rg'] != '')
+				$ob = Atletas::where("rg",$campos['rg'])->where('campus',Auth::user()->campus)->count();
+			if($campos['matricula'] != '')
+				$ob2 = Atletas::where("matricula",$campos['matricula'])->where('campus',Auth::user()->campus)->count();
+			if($campos['cpf'] != '')
+				$ob3 = Atletas::where("cpf",$campos['cpf'])->where('campus',Auth::user()->campus)->count();			
+			if($ob > 0 or $ob2 > 0 or $ob3 > 0){
 				$msg[0] = 'erro';
 				$msg[1] = 'Já existe um outro atleta com o mesmo cpf ou rg ou matricula (no mesmo campus)';
 			}else{

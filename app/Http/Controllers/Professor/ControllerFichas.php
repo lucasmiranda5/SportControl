@@ -72,7 +72,7 @@ class ControllerFichas extends Controller
 		$campos = Request::all();
 		$evento = Eventos::find($campos['evento']);
 		$campus = Campus::find(Auth::user()->campus);
-
+		$cam = Campus::find(Auth::user()->campus);
 		$phpWord = new \PhpOffice\PhpWord\PhpWord();
 		$sectionStyle = array(
 		    'marginTop' => 50,
