@@ -48,7 +48,7 @@ class ControllerAtletasModalidade extends Controller
 					$arr[] = $tem['id'];
 				}
 			}
-			$atletas = AtletasModalidade::where("modalidade",$campos['modalidade'])->where("evento",$campos['evento'])->get();
+			$atletas = AtletasModalidade::where("modalidade",$campos['modalidade'])->where("evento",$campos['evento'])->where('campus',Auth::user()->campus)->get();
 			foreach($atletas as $atleta){
 				if(!in_array($atleta['id'], $arr)){
 					AtletasModalidade::find($atleta['id'])->delete();

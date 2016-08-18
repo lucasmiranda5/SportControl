@@ -28,6 +28,9 @@ class ControllerCrachas extends Controller
 	<link href="<?=App::make('url')->to('/')?>/resources/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 <link href="<?=App::make('url')->to('/')?>/resources/assets/dist/css/AdminLTE.css" />
 <link href="<?=App::make('url')->to('/')?>/resources/assets/dist/css/skins/_all-skins.min.css" />
+<style>
+	body{ margin:0; padding: 0; }
+</style>
 
 	</head>
 	<body>
@@ -50,12 +53,14 @@ class ControllerCrachas extends Controller
 				}
 			}
 			?>
-		<div style="margin-top:45px; height:680px">
-		<img src="<?=App::make('url')->to('/')?>/cracha.jpg" width="500px">
-		<img src="<?=App::make('url')->to('/')?>/images/<?=$valor['foto'];?>" style="margin-left: -474px;width: 145px;margin-top: 90px;border-radius: 15px;">
-		<div style="margin-top: -276px;margin-left: 190px;width: 280px;font-size: 20px;"><?=@$valor["nome"];?></div>
-		<div style="width: 280px;font-size: 20px;margin-top: 55px;margin-left: 47px;"><?=$campus['campus'];?></div>
-		<div style="width: 433px;font-size: 20px;margin-top: 65px;margin-left: 37px;"><?=$mods;?></div>
+		<div style="margin-top:45px; height:544px; width:50%; float:left">
+		<img src="<?=App::make('url')->to('/')?>/cracha.jpg" width="400px">
+		<?php if($valor['foto'] != '' and file_exists(base_path().'/images/'.$valor['foto'])) { ?>
+			<img src="<?=App::make('url')->to('/')?>/images/<?=$valor['foto'];?>" style="margin-left: -380px;width: 115px;margin-top: 69px;border-radius: 15px;height: 130px;">
+		<?php } ?>
+		<div style="margin-top: -220px;margin-left: 153px;width: 224px;font-size: 14px;"><?=@$valor["nome"];?></div>
+		<div style="width: 280px;font-size: 20px;margin-top: 60px;margin-left: 47px;"><?=$campus['campus'];?></div>
+		<div style="width: 433px;font-size: 20px;margin-top: 45px;margin-left: 37px;"><?=$mods;?></div>
 		</div>
 		<?php }}
 		   }
