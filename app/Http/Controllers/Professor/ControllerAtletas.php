@@ -67,7 +67,7 @@ class ControllerAtletas extends Controller
 		if($retorno['campus'] == Auth::user()->campus){
 		$acao = Request::input('acao');
 		$msg = [];
-		$campos = Request::all();query
+		$campos = Request::all();
 		if($acao == 'editar' and Request::input('_token')){
 			$ob = 0;
 			$ob2 = 0;
